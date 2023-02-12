@@ -1,5 +1,4 @@
 const constants = {
-    DATABASE_URI: process.env.DATABASE_URI,
     MESSAGES: {
         CONNECTED: "Connection Successful",
         ERROR: "There was an error",

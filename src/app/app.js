@@ -13,11 +13,8 @@ app.get("/", (req, res) => {
     res.status(200).send({message: MESSAGES.CONNECTED && "Welcome to my hotel management system..", success: true})
 })
 
-// declaring the port variable
-const PORT = process.env.PORT || 3000;
-
 // Start the Express server
-app.listen(PORT, () => {
+app.listen(3000, () => {
     console.log(`Server listening on port ${PORT}`);
     database() 
 })
