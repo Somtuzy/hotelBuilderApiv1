@@ -4,7 +4,7 @@ const ObjectId = Schema.Types.ObjectId
 // Define the schema for the RoomType model
 const RoomTypeSchema = new Schema({
     _id: {
-      type: String
+      type: ObjectId
     },
     name: {
       type: String,

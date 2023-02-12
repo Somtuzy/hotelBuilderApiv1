@@ -1,7 +1,6 @@
 const express = require("express");
 const Room = require("../models/roomSchema");
 const { MESSAGES } = require("../app/constants")
-const create = require("../app/controller")
 const app = require("../app/app")
 const cors = require("cors")
 
@@ -9,8 +8,8 @@ app.use(cors())
 app.use(express.json())
 
 // Create room
-app.post("/rooms", async (req, res) => {
-    const room = await create.addRoom(req.body);
+app.post("/api/v1/rooms", async (req, res) => {
+    const room = await Room.create(req.body);
     try {
         res.status(200).send({message: MESSAGES.ROOM.CREATED, success: true, room})
     } catch (err) {
@@ -20,7 +19,7 @@ app.post("/rooms", async (req, res) => {
 
 
 // Filter and fetch all rooms
-const url = "/rooms?search={searchRoomNameMatch}&roomType={searchRoomTypeNameMatch}&minPrice={searchRoomMinimumPriceMatch}&maxPrice={searchRoomMaximumPriceMatch}"
+const url = "/api/v1/rooms?search={searchRoomNameMatch}&roomType={searchRoomTypeNameMatch}&minPrice={searchRoomMinimumPriceMatch}&maxPrice={searchRoomMaximumPriceMatch}"
 app.get(url, async (req, res) => {
     const search = req.query.search;
     const roomType = req.query.roomType;
@@ -40,7 +39,7 @@ app.get(url, async (req, res) => {
     if (maxPrice) {
         filter.price = {$lte: maxPrice}
     }
-    const rooms = await create.getRooms({filter});
+    const rooms = await Room.find({filter});
     res.status(200)
     .send({message: MESSAGES.ROOM.FETCHED, success: true, rooms: rooms})
 } catch (err) {
@@ -49,10 +48,10 @@ app.get(url, async (req, res) => {
 })
 
 // Edit a room by its id
-app.patch("/rooms/:id", async (req, res) => {
-    const { id, data } = req.body
+app.patch("/api/v1/rooms/:id", async (req, res) => {
+    const { id, data } = req.params
     try {
-        const room = await create.editRoom(id, data)
+        const room = await Room.findByIdAndUpdate(id, data)
         res.status(200).send({message: MESSAGES.ROOM.UPDATED, success: true, room})
     } catch (err) {
         res.status(500).send({message: err.message || MESSAGES.ERROR, success: false})
@@ -60,10 +59,10 @@ app.patch("/rooms/:id", async (req, res) => {
 })
 
 // Remove a room by its id
-app.delete("/rooms/:id", async (req, res) => {
+app.delete("/api/v1/rooms/:id", async (req, res) => {
     const { id } = req.params
     try { 
-        const room = await create.deleteRoom(id);
+        const room = await Room.findByIdAndDelete(id);
         res.status(200).send({message: MESSAGES.ROOM.DELETED, success: true, room})
     } catch (err) {
         res.status(500).send({message: err.message || MESSAGES.ERROR, success: false})
@@ -71,10 +70,10 @@ app.delete("/rooms/:id", async (req, res) => {
 })
 
 // get a room
-app.get("/rooms/:id", async (req, res) => {
+app.get("/api/v1/rooms/:id", async (req, res) => {
     const { id } = req.params
     try {
-        const room = await create.getRoom(id)
+        const room = await Room.findById(id)
         res.status(200).send({message: MESSAGES.ROOM.FETCHED, success: true, room})
     } catch (err) {
         res.status(500).send({message: err.message || MESSAGES.ERROR, success: false})

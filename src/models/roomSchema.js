@@ -5,14 +5,14 @@ const RoomType = require("./roomTypeSchema")
 // Define the Schema for the Room model
 const RoomSchema = new Schema({
     _id: {
-      type: String
+      type: ObjectId
     },
     name: {
       type: String,
       required: [true, 'Please specify the room name']
     },
     roomType: {
-      type: String,
+      type: ObjectId,
       ref: RoomType,
       required: [true, 'Please specify the room type']
     },

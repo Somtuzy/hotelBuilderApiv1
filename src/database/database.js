@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', true);
 const constants = require('../app/constants')
-const Uri = process.env.DATABASE_URI
+const Uri = "mongodb+srv://gandalfTheBlack:getduf-qubvav-cyXpi5@tehcville.y2rv9we.mongodb.net/?retryWrites=true&w=majority"
 
 function database() {
     mongoose
